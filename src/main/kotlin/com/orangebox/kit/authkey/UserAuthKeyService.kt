@@ -10,7 +10,7 @@ class UserAuthKeyService {
     @Inject
     private lateinit var userAuthKeyDAO: UserAuthKeyDAO
 
-    fun createKey(idUser: String, type: UserAuthKeyTypeEnum): UserAuthKey? {
+    fun createKey(idUser: String, type: UserAuthKeyTypeEnum): UserAuthKey {
         var key = loadKeyByUser(idUser, type)
         if (key == null) {
             key = UserAuthKey()
@@ -29,7 +29,7 @@ class UserAuthKeyService {
         return key
     }
 
-    fun validateKey(key: UserAuthKey): Boolean? {
+    fun validateKey(key: UserAuthKey): Boolean {
         var validated = false
         val keyBase = loadKeyByUser(key.idUser!!, key.type!!)
         if (keyBase != null && keyBase.key == key.key) {
@@ -49,8 +49,8 @@ class UserAuthKeyService {
         )
     }
 
-    fun generateSMSNumber(): String? {
-        var numberStr: String? = null
+    fun generateSMSNumber(): String {
+        var numberStr = ""
         var numberFound = false
         while (!numberFound) {
             val number = (Math.random() * 10000).toInt()
