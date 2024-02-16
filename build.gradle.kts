@@ -1,9 +1,11 @@
+import org.kordamp.gradle.plugin.jandex.tasks.JandexTask
+
 plugins {
-    kotlin("jvm") version "1.7.22"
-    kotlin("plugin.allopen") version "1.7.22"
+    id("org.kordamp.gradle.jandex") version "1.1.0"
+    kotlin("jvm") version "1.9.22"
+    kotlin("plugin.allopen") version "1.9.22"
     id("io.quarkus")
     id("maven-publish")
-    id("org.kordamp.gradle.jandex") version "1.1.0"
 }
 
 repositories {
@@ -25,14 +27,14 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.quarkus:quarkus-arc")
 
-    implementation("com.orangebox.kit.core:orangekit-core:1.0.22")
+    implementation("com.orangebox.kit.core:orangekit-core:2.0.1")
 
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
 }
 
 group = "com.orangebox.kit.authkey"
-version = "1.0.1"
+version = "2.0.0"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -42,6 +44,12 @@ java {
 tasks.withType<Test> {
     systemProperty("java.util.logging.manager", "org.jboss.logmanager.LogManager")
 }
+
+tasks.withType<JandexTask> {
+    dependsOn(":quarkusDependenciesBuild")
+    dependsOn(":test")
+}
+
 allOpen {
     annotation("javax.ws.rs.Path")
     annotation("javax.enterprise.context.ApplicationScoped")
